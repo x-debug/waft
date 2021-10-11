@@ -1,0 +1,23 @@
+http:
+  listen: ":8888"
+  filters:
+    aaa:
+      ipWhiteList:
+        sourceRange:
+          - "127.0.0.1/32"
+          - "192.168.1.7"
+      rateLimit:
+        average: 101
+        burst: 51
+  services:
+    abc:
+      mode: "static"
+      servers:
+        - url: "https://www.baidu.com/"
+          weight: 2
+        - url: "https://www.google.com/"
+          weight: 6
+      rule: "localhost:8888"
+      balancer: "random"
+      filter: "aaa"
+
