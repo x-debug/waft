@@ -13,11 +13,11 @@
 This is a lightweight API Gateway and Management Platform, It's **Developing** currently.
 
 ## Key Features
-* Load Balance
-* Service Discovery
-* Plugin
-* JWT Authorization
-* API Retry After Failure
-* Backend Server Health Check
-* Management of API
-* Circuit Breaker
+* [x] Load Balance
+* [ ] Service Discovery
+* [x] Plugin
+* [ ] JWT Authorization
+* [ ] API Retry After Failure
+* [ ] Backend Server Health Check
+* [ ] Management of API
+* [ ] Circuit Breaker
