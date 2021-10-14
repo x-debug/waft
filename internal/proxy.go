@@ -68,6 +68,10 @@ func (p *Proxy) director(req *http.Request) {
 	backend := service.lb.Select(req, service.servers)
 	req.URL.Scheme = backend.Parsed.Scheme
 	req.URL.Host = backend.Parsed.Host
+	if _, ok := req.Header["User-Agent"]; !ok {
+		// explicitly disable User-Agent so it's not set to default value
+		req.Header.Set("User-Agent", "")
+	}
 }
 
 func (p *Proxy) modifyResp(resp *http.Response) error {
@@ -87,8 +91,8 @@ func (p *Proxy) errorHandler(rw http.ResponseWriter, req *http.Request, err erro
 
 func (p *Proxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	service := p.getService(req)
-	errFilter, code, err := service.doPreFilters(rw, req)
-	rw.WriteHeader(code)
+	errFilter, _, err := service.doPreFilters(rw, req)
+	//rw.WriteHeader(code)
 	if err != nil {
 		p.errorHandler(rw, req, fmt.Errorf("error filter name:%s, error: %v", errFilter, err))
 		return

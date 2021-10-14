@@ -17,11 +17,15 @@ This is a lightweight API Gateway and Management Platform, It's **Developing** c
 **Coming soon...**
 
 ## Key Features
+* [ ] Hot reload configuration
+* [x] Multi-Service
 * [x] Load Balance
 * [ ] Service Discovery
 * [x] Plugin
+* [ ] IpWhiteList
 * [ ] JWT Authorization
 * [ ] API Retry After Failure
 * [ ] Backend Server Health Check
 * [ ] Management of API
 * [ ] Circuit Breaker
+* [ ] RateLimit

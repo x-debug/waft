@@ -29,7 +29,7 @@ func (m *defaultMatcher) Add(service string, rule string) error {
 
 func (m *defaultMatcher) Match(req *http.Request) (string, error) {
 	for srv, rule := range m.rules {
-		if strings.HasSuffix(req.Host, rule) { //return true if host is xxx.domain.com, rule is domain.com
+		if strings.Contains(req.Host, rule) { //return true if host is xxx.domain.com, rule is domain.com
 			return srv, nil
 		}
 	}

@@ -1,5 +1,5 @@
 http:
-  listen: ":8888"
+  listen: ":80"
   filters:
     aaa:
       ipWhiteList:
@@ -11,13 +11,23 @@ http:
         burst: 51
   services:
     abc:
+      rule: "localhost"
       mode: "static"
       servers:
-        - url: "https://www.baidu.com/"
+        - url: "http://localhost:1111"
           weight: 2
-        - url: "https://www.google.com/"
-          weight: 6
-      rule: "localhost:8888"
+        - url: "http://localhost:2222"
+          weight: 3
+      balancer: "random"
+      filter: "aaa"
+    acc:
+      rule: "demo.chenxf.org"
+      mode: "static"
+      servers:
+        - url: "http://localhost:1111"
+          weight: 2
+        - url: "http://localhost:2222"
+          weight: 4
       balancer: "random"
       filter: "aaa"
 
