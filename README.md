@@ -16,6 +16,8 @@ This is a lightweight API Gateway and Management Platform, It's **Developing** c
 ## Document
 **Coming soon...**
 
+## QuickStart
+
 ## Key Features
 * [ ] Hot reload configuration
 * [x] Multi-Service

@@ -9,7 +9,7 @@ clean:
 
 build: clean test
 	@echo -e "\nBUILDING $(OUTPUT)/waft BINARY"
-	mkdir -p ./$(OUTPUT) && go build -o $(OUTPUT)/waft waft/main.go
+	mkdir -p ./$(OUTPUT) && go build -o $(OUTPUT)/waft waft/main.go && go build -o $(OUTPUT)/test_backend test_backend/main.go
 
 test:
 	@echo -e "\nTESTING"
