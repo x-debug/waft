@@ -17,6 +17,14 @@ This is a lightweight API Gateway and Management Platform, It's **Developing** c
 **Coming soon...**
 
 ## QuickStart
+```
+make build
+./build/test_backend -port 1111 //open backend on port 1111 for loadbalancer 
+./build/test_backend -port 2222 //open backend on port 2222 for loadbalancer
+./build/waft
+```
+
+open web browser http://localhost or your domain config in waft.yml
 
 ## Key Features
 * [ ] Hot reload configuration
