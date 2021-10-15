@@ -28,6 +28,9 @@ make build
 
 open web browser http://localhost or your domain config in waft.yml
 
+## About Daemon
+Waft not support run on background, but you can use nohup or supervisord.
+
 ## Key Features
 * [ ] Hot reload configuration
 * [x] Multi-Service
