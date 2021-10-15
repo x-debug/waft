@@ -1,3 +1,4 @@
+pid: "/tmp/waft.pid"
 http:
   listen: ":80"
   filters:

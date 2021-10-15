@@ -9,6 +9,7 @@ import (
 )
 
 type ProxyConf struct {
+	Pid  string `yaml:"pid"`
 	Http struct {
 		Listen   string                 `yaml:"listen"`
 		Services map[string]ServiceConf `yaml:"services"`
@@ -19,11 +20,11 @@ type ProxyConf struct {
 
 type ServiceConf struct {
 	proxy    *ProxyConf
-	Mode     string        `yaml:"mode"` //static mode: define value in yaml file, etcd mode: read value from etcd central repo
-	Rule     string        `yaml:"rule"` //path selector
-	Balancer string        `yaml:"balancer"`
+	Mode     string         `yaml:"mode"` //static mode: define value in yaml file, etcd mode: read value from etcd central repo
+	Rule     string         `yaml:"rule"` //path selector
+	Balancer string         `yaml:"balancer"`
 	Servers  []*BackendInfo `yaml:"servers"`
-	Filter   string        `yaml:"filter"`
+	Filter   string         `yaml:"filter"`
 }
 
 func LoadProxyConf(conf io.Reader) (*ProxyConf, error) {
