@@ -21,7 +21,9 @@ This is a lightweight API Gateway and Management Platform, It's **Developing** c
 make build
 ./build/test_backend -port 1111 //open backend on port 1111 for loadbalancer 
 ./build/test_backend -port 2222 //open backend on port 2222 for loadbalancer
-./build/waft
+./build/waft start //start proxy server
+./build/waft stop //stop proxy server
+./build/waft restart //also, restart server easily
 ```
 
 open web browser http://localhost or your domain config in waft.yml
