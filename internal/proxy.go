@@ -9,10 +9,10 @@ import (
 )
 
 type Proxy struct {
-	conf          *config.ProxyConf
-	reverser      *httputil.ReverseProxy
-	matcher       Matcher
-	services      map[string]*Service
+	conf     *config.ProxyConf
+	reverser *httputil.ReverseProxy
+	matcher  Matcher
+	services map[string]*Service
 	//filter Life cycle management
 	filterFactory *filterFactory
 }

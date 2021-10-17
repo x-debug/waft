@@ -16,7 +16,7 @@ type nopBalancer struct {
 	conf *config.ServiceConf
 }
 
-func (r *nopBalancer)Init(conf *config.ServiceConf){
+func (r *nopBalancer) Init(conf *config.ServiceConf) {
 	r.conf = conf
 }
 
@@ -30,6 +30,7 @@ func (r *nopBalancer) Name() string {
 
 var balancerTable = map[string]Balancer{
 	"random": &randomBalancer{},
+	"wrr":    &WRR{},
 }
 
 func CreateBalancer(name string, conf *config.ServiceConf) Balancer {

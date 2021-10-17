@@ -29,6 +29,6 @@ http:
           weight: 2
         - url: "http://localhost:2222"
           weight: 4
-      balancer: "random"
+      balancer: "wrr"
       filter: "aaa"
 
