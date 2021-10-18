@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"waft/config"
 	"waft/internal"
+	"waft/pkg"
 	"waft/pkg/array"
 )
 
@@ -43,35 +44,40 @@ func help() string {
 }
 
 func start(conf *config.ProxyConf) {
-	_, err := os.Stat(conf.Pid)
-	exist := true
-	if err != nil && os.IsNotExist(err) {
-		exist = false
-	}
+	exist := pkg.FileExist(conf.Pid)
 	if exist {
 		log.Fatalln("pid file exist")
 	}
 
 	curPid := os.Getpid()
-	err = ioutil.WriteFile(conf.Pid, []byte(strconv.Itoa(curPid)), 0777)
+	err := ioutil.WriteFile(conf.Pid, []byte(strconv.Itoa(curPid)), 0777)
 	if err != nil {
 		log.Fatalln("write pid error ", err.Error())
 	}
 	proxy := internal.NewProxy(conf)
-	log.Fatalln(proxy.Run())
+	err = proxy.Run()
+	if err != nil {
+		stop(conf.Pid, false)
+	}
 }
 
-func stop(pidFile string) {
-	fbuf, err := ioutil.ReadFile(pidFile)
-	if err != nil {
-		log.Fatalln("read pid file error", err.Error())
+func stop(pidFile string, sig bool) {
+	exist := pkg.FileExist(pidFile)
+	if exist {
+		if sig {
+			fbuf, err := ioutil.ReadFile(pidFile)
+			if err != nil {
+				log.Fatalln("read pid file error", err.Error())
+			}
+			pid, _ := strconv.Atoi(string(fbuf))
+			err = syscall.Kill(pid, 9)
+			if err != nil {
+				log.Fatalln("kill proxy error", err.Error())
+			}
+		}
+
+		_ = os.Remove(pidFile)
 	}
-	pid, _ := strconv.Atoi(string(fbuf))
-	err = syscall.Kill(pid, 9)
-	if err != nil {
-		log.Fatalln("kill proxy error", err.Error())
-	}
-	_ = os.Remove(pidFile)
 }
 
 func startCmd(conf *config.ProxyConf) {
@@ -87,9 +93,9 @@ func startCmd(conf *config.ProxyConf) {
 	if cmd == "start" {
 		start(conf)
 	} else if cmd == "stop" {
-		stop(conf.Pid)
+		stop(conf.Pid, true)
 	} else {
-		stop(conf.Pid)
+		stop(conf.Pid, true)
 		start(conf)
 	}
 }
