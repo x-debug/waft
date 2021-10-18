@@ -6,6 +6,7 @@ import (
 	"waft/config"
 )
 
+//Balancer Load balancing is used to select one machine among multiple machines
 type Balancer interface {
 	Init(conf *config.ServiceConf)
 	Select(req *http.Request, services *list.List) *config.BackendInfo
@@ -33,6 +34,7 @@ var balancerTable = map[string]Balancer{
 	"wrr":    &WRR{},
 }
 
+//CreateBalancer create new balancer
 func CreateBalancer(name string, conf *config.ServiceConf) Balancer {
 	var (
 		balancer Balancer

@@ -8,6 +8,7 @@ import (
 	"waft/config"
 )
 
+//Proxy core data structure, mainly used to abstract a proxy server
 type Proxy struct {
 	conf     *config.ProxyConf
 	reverser *httputil.ReverseProxy
@@ -21,7 +22,7 @@ type Proxy struct {
 func initMatchers(conf *config.ProxyConf) Matcher {
 	matcher := NewMatcher()
 
-	for srvName, srvConf := range conf.Http.Services {
+	for srvName, srvConf := range conf.HTTP.Services {
 		if err := matcher.Add(srvName, srvConf.Rule); err != nil {
 			log.Fatalln("matcher add error", err.Error())
 		}
@@ -33,12 +34,13 @@ func initMatchers(conf *config.ProxyConf) Matcher {
 //init service
 func initServices(proxy *Proxy, conf *config.ProxyConf) map[string]*Service {
 	services := make(map[string]*Service)
-	for srvName, srvConf := range conf.Http.Services {
+	for srvName, srvConf := range conf.HTTP.Services {
 		services[srvName] = NewService(proxy, &srvConf)
 	}
 	return services
 }
 
+//NewProxy create proxy server
 func NewProxy(conf *config.ProxyConf) *Proxy {
 	proxy := &Proxy{
 		conf:          conf,
@@ -101,10 +103,11 @@ func (p *Proxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	p.reverser.ServeHTTP(rw, req)
 }
 
+//Run proxy start, it is always running and will not exit
 func (p *Proxy) Run() error {
 	p.reverser.Director = p.director
 	p.reverser.ModifyResponse = p.modifyResp
 	p.reverser.ErrorHandler = p.errorHandler
-	log.Println(fmt.Sprintf("Proxy Server Started, Serve Port %s ...", p.conf.Http.Listen))
-	return http.ListenAndServe(p.conf.Http.Listen, p)
+	log.Println(fmt.Sprintf("Proxy Server Started, Serve Port %s ...", p.conf.HTTP.Listen))
+	return http.ListenAndServe(p.conf.HTTP.Listen, p)
 }

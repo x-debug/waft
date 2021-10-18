@@ -10,6 +10,8 @@ type filterContext struct {
 	outReq *http.Request
 }
 
+//Filter Intercept requests, provide plug-in functions, and many extended functions,
+//such as current limiting, whitelisting, and Circuit Breaker are all implemented through filtering functions
 type Filter interface {
 	Name() string
 

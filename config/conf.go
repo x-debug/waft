@@ -8,9 +8,10 @@ import (
 	"net/url"
 )
 
+//ProxyConf config of proxy
 type ProxyConf struct {
 	Pid  string `yaml:"pid"`
-	Http struct {
+	HTTP struct {
 		Listen   string                 `yaml:"listen"`
 		Services map[string]ServiceConf `yaml:"services"`
 		//first key is group name, second key is filter name, third key is setting column
@@ -18,6 +19,7 @@ type ProxyConf struct {
 	} `yaml:"http"`
 }
 
+//ServiceConf config of service
 type ServiceConf struct {
 	proxy    *ProxyConf
 	Mode     string         `yaml:"mode"` //static mode: define value in yaml file, etcd mode: read value from etcd central repo
@@ -27,6 +29,7 @@ type ServiceConf struct {
 	Filter   string         `yaml:"filter"`
 }
 
+//LoadProxyConf load proxy configuration, if parse error, return error reason
 func LoadProxyConf(conf io.Reader) (*ProxyConf, error) {
 	var proxyConf ProxyConf
 
@@ -38,19 +41,20 @@ func LoadProxyConf(conf io.Reader) (*ProxyConf, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, srv := range proxyConf.Http.Services {
+	for _, srv := range proxyConf.HTTP.Services {
 		srv.proxy = &proxyConf
 		for _, backend := range srv.Servers {
 			if err = backend.parse(); err != nil {
-				log.Fatalln("parse server url error: ", backend.Url)
+				log.Fatalln("parse server url error: ", backend.URL)
 			}
 		}
 	}
 	return &proxyConf, nil
 }
 
+//BackendInfo backend service information, balancer collect this information
 type BackendInfo struct {
-	Url    string `yaml:"url"`
+	URL    string `yaml:"url"`
 	Weight int    `yaml:"weight"`
 
 	Parsed struct {
@@ -60,7 +64,7 @@ type BackendInfo struct {
 }
 
 func (bi *BackendInfo) parse() error {
-	uri, err := url.Parse(bi.Url)
+	uri, err := url.Parse(bi.URL)
 	if err != nil {
 		return err
 	}

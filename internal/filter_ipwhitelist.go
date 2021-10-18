@@ -5,16 +5,19 @@ import (
 	"net/http"
 )
 
-const filterNameIpWhite = "ipWhiteList"
+const filterNameIPWhite = "ipWhiteList"
 
+//ErrSourceRange IP White List source range config error
 var ErrSourceRange = errors.New("source range parameter must pass")
 
-type IpWhiteListFilter struct {
+//IPWhiteListFilter Restriction can only be released within these ip ranges
+type IPWhiteListFilter struct {
 	baseFilter
 	sourceRange []string
 }
 
-func (f *IpWhiteListFilter) Init(setting map[string]interface{}) error {
+//Init init filter
+func (f *IPWhiteListFilter) Init(setting map[string]interface{}) error {
 	if value, ok := setting["sourceRange"]; ok {
 		ranges := make([]string, 0)
 		for _, val := range value.([]interface{}) {
@@ -27,10 +30,12 @@ func (f *IpWhiteListFilter) Init(setting map[string]interface{}) error {
 	return nil
 }
 
-func (f *IpWhiteListFilter) Name() string {
-	return filterNameIpWhite
+//Name filter name
+func (f *IPWhiteListFilter) Name() string {
+	return filterNameIPWhite
 }
 
-func (f *IpWhiteListFilter) Pre(rw http.ResponseWriter, req *http.Request) (statusCode int, err error) {
+//Pre front filter, execute before the request, usually used to modify the request object
+func (f *IPWhiteListFilter) Pre(rw http.ResponseWriter, req *http.Request) (statusCode int, err error) {
 	return 0, nil
 }

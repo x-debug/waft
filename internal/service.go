@@ -6,6 +6,9 @@ import (
 	"waft/pkg/lb"
 )
 
+//Service every domain can abstract a service,
+//It is a logical concept that can be used to configure domain name rules and specify filters,
+//One proxy can correspond to multiple services
 type Service struct {
 	proxy *Proxy
 	conf  *config.ServiceConf
@@ -16,6 +19,7 @@ type Service struct {
 	servers *list.List
 }
 
+//NewService create new service
 func NewService(proxy *Proxy, conf *config.ServiceConf) *Service {
 	service := &Service{proxy: proxy, conf: conf}
 	service.lb = lb.CreateBalancer(conf.Balancer, conf)

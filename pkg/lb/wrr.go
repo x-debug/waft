@@ -19,6 +19,7 @@ type WRR struct {
 	cw    int
 }
 
+//Init initialization balancer
 func (w *WRR) Init(conf *config.ServiceConf) {
 	for _, srvConf := range conf.Servers {
 		w.Add(srvConf)
@@ -29,7 +30,7 @@ func (w *WRR) Init(conf *config.ServiceConf) {
 func (w *WRR) All() map[interface{}]int {
 	m := make(map[interface{}]int)
 	for _, i := range w.items {
-		m[i.Url] = i.Weight
+		m[i.URL] = i.Weight
 	}
 	return m
 }
@@ -50,6 +51,7 @@ func (w *WRR) Reset() {
 	w.cw = 0
 }
 
+//Add add a backend
 func (w *WRR) Add(server *config.BackendInfo) {
 	if server.Weight > 0 {
 		if w.gcd == 0 {
@@ -66,7 +68,7 @@ func (w *WRR) Add(server *config.BackendInfo) {
 	}
 	w.items = append(w.items, server)
 	w.n++
-	log.Println("Add Server ", server.Url)
+	log.Println("Add Server ", server.URL)
 }
 
 func gcd(x, y int) int {
@@ -82,6 +84,7 @@ func gcd(x, y int) int {
 	}
 }
 
+//Select Choose one of multiple services based on the request
 func (w *WRR) Select(req *http.Request, servers *list.List) *config.BackendInfo {
 	if w.n == 0 {
 		return nil
@@ -104,12 +107,13 @@ func (w *WRR) Select(req *http.Request, servers *list.List) *config.BackendInfo 
 		}
 
 		if w.items[w.i].Weight >= w.cw {
-			log.Println("Selected Server is ", w.items[w.i].Url)
+			log.Println("Selected Server is ", w.items[w.i].URL)
 			return w.items[w.i]
 		}
 	}
 }
 
+//Name balancer's name
 func (w *WRR) Name() string {
 	return "wrr"
 }
