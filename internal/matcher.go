@@ -6,9 +6,13 @@ import (
 	"strings"
 )
 
+//ErrNotFound service's rule not found
 var ErrNotFound = errors.New("rule not found")
+
+//ErrServiceExist service register already
 var ErrServiceExist = errors.New("service exist")
 
+//Matcher service matcher interface
 type Matcher interface {
 	Match(req *http.Request) (string, error)
 	Add(service string, rule string) error
@@ -36,6 +40,7 @@ func (m *defaultMatcher) Match(req *http.Request) (string, error) {
 	return "", ErrNotFound
 }
 
+//NewMatcher create matcher
 func NewMatcher() Matcher {
 	return &defaultMatcher{rules: make(map[string]string)}
 }

@@ -15,8 +15,8 @@ type filterFactory struct {
 func initializeFilters(name string, setting map[string]interface{}) Filter {
 	var filter Filter
 	switch name {
-	case filterNameIpWhite:
-		filter = &IpWhiteListFilter{}
+	case filterNameIPWhite:
+		filter = &IPWhiteListFilter{}
 	case filterNameRateLimit:
 		filter = &RateLimitFilter{}
 	}
@@ -29,7 +29,7 @@ func initializeFilters(name string, setting map[string]interface{}) Filter {
 
 func createFilterFactory(conf *config.ProxyConf) *filterFactory {
 	filterMap := make(map[string]*list.List)
-	for group, filters := range conf.Http.Filters {
+	for group, filters := range conf.HTTP.Filters {
 		scopeFilters := list.New()
 		for name, setting := range filters {
 			scopeFilters.PushBack(initializeFilters(name, setting))

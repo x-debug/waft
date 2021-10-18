@@ -1,6 +1,6 @@
 pid: "/tmp/waft.pid"
 http:
-  listen: ":80"
+  listen: ":8080"
   filters:
     aaa:
       ipWhiteList:
