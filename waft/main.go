@@ -16,7 +16,7 @@ import (
 )
 
 func setupSignal(pid string) {
-	c := make(chan os.Signal)
+	c := make(chan os.Signal, 1)
 
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGUSR1, syscall.SIGUSR2)
 	go func() {
@@ -32,13 +32,13 @@ func setupSignal(pid string) {
 }
 
 var (
-	cfgFile string
-	version bool
+	cfgFile   string
+	version   bool
 	allowCmds []string
 
 	buildTime   string
 	buildVer    string
-	gitCommitId string
+	gitCommitID string
 )
 
 func init() {
@@ -114,7 +114,7 @@ func main() {
 	if version {
 		fmt.Printf("Build Time: %s\n", buildTime)
 		fmt.Printf("Build Version: %s\n", buildVer)
-		fmt.Printf("Git Commit ID: %s\n", gitCommitId)
+		fmt.Printf("Git Commit ID: %s\n", gitCommitID)
 		return
 	}
 

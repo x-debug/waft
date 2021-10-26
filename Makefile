@@ -10,7 +10,7 @@ clean:
 build: clean test
 	@echo -e "\nBUILDING $(OUTPUT)/waft BINARY"
 	mkdir -p ./$(OUTPUT) && go build -ldflags \
-	"-X main.buildTime=`date +%Y-%m-%d,%H:%M:%S` -X main.buildVer=1.0.0 -X main.gitCommitId=`git rev-parse HEAD`" \
+	"-X main.buildTime=`date +%Y-%m-%d,%H:%M:%S` -X main.buildVer=1.0.0 -X main.gitCommitID=`git rev-parse HEAD`" \
 	-o $(OUTPUT)/waft waft/main.go && go build -o $(OUTPUT)/test_backend test_backend/main.go
 
 test:
