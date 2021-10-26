@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -15,7 +16,7 @@ import (
 )
 
 func setupSignal(pid string) {
-	c := make(chan os.Signal)
+	c := make(chan os.Signal, 1)
 
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGUSR1, syscall.SIGUSR2)
 	go func() {
@@ -31,8 +32,13 @@ func setupSignal(pid string) {
 }
 
 var (
-	cfg       string
+	cfgFile   string
+	version   bool
 	allowCmds []string
+
+	buildTime   string
+	buildVer    string
+	gitCommitID string
 )
 
 func init() {
@@ -101,9 +107,18 @@ func startCmd(conf *config.ProxyConf) {
 }
 
 func main() {
-	flag.StringVar(&cfg, "config", "./conf_example/waft.yml", "config of server")
+	flag.StringVar(&cfgFile, "config", "./conf_example/waft.yml", "config of server")
+	flag.BoolVar(&version, "version", false, "compile info")
 	flag.Parse()
-	file, err := os.Open(cfg)
+
+	if version {
+		fmt.Printf("Build Time: %s\n", buildTime)
+		fmt.Printf("Build Version: %s\n", buildVer)
+		fmt.Printf("Git Commit ID: %s\n", gitCommitID)
+		return
+	}
+
+	file, err := os.Open(cfgFile)
 	if err != nil {
 		log.Fatalln("open config file error: ", err.Error())
 	}
