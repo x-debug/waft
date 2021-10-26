@@ -32,8 +32,8 @@ func setupSignal(pid string) {
 }
 
 var (
-	cfg       string
-	version   bool
+	cfgFile string
+	version bool
 	allowCmds []string
 
 	buildTime   string
@@ -107,7 +107,7 @@ func startCmd(conf *config.ProxyConf) {
 }
 
 func main() {
-	flag.StringVar(&cfg, "config", "./conf_example/waft.yml", "config of server")
+	flag.StringVar(&cfgFile, "config", "./conf_example/waft.yml", "config of server")
 	flag.BoolVar(&version, "version", false, "compile info")
 	flag.Parse()
 
@@ -118,7 +118,7 @@ func main() {
 		return
 	}
 
-	file, err := os.Open(cfg)
+	file, err := os.Open(cfgFile)
 	if err != nil {
 		log.Fatalln("open config file error: ", err.Error())
 	}
