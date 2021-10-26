@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -32,7 +33,12 @@ func setupSignal(pid string) {
 
 var (
 	cfg       string
+	version   bool
 	allowCmds []string
+
+	buildTime   string
+	buildVer    string
+	gitCommitId string
 )
 
 func init() {
@@ -102,7 +108,16 @@ func startCmd(conf *config.ProxyConf) {
 
 func main() {
 	flag.StringVar(&cfg, "config", "./conf_example/waft.yml", "config of server")
+	flag.BoolVar(&version, "version", false, "compile info")
 	flag.Parse()
+
+	if version {
+		fmt.Printf("Build Time: %s\n", buildTime)
+		fmt.Printf("Build Version: %s\n", buildVer)
+		fmt.Printf("Git Commit ID: %s\n", gitCommitId)
+		return
+	}
+
 	file, err := os.Open(cfg)
 	if err != nil {
 		log.Fatalln("open config file error: ", err.Error())
